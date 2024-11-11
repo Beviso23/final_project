@@ -22,19 +22,27 @@ library(htmlwidgets)
 explosions <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/refs/heads/master/data/2019/2019-08-20/nuclear_explosions.csv")
 ```
 
-```{r}
+```{r AL}
+# Alex's graph
+
 
 ```
 
-```{r}
+```{r OB}
+# Owen's graph
+
 
 ```
 
-```{r}
+```{r AG}
+# Arielle's graph
+
 
 ```
 
-```{r}
+```{r SG}
+# Susan's graph
+
 
 ```
 
