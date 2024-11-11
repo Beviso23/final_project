@@ -19,7 +19,7 @@ library(htmlwidgets)
 ```
 
 ```{r data}
-explosions <- read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/refs/heads/master/data/2019/2019-08-20/nuclear_explosions.csv")
+explosions <- read_csv("data/nuclear_explosions.csv")
 ```
 
 ```{r AL}
