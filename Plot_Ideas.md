@@ -33,6 +33,6 @@ World Map with Point for Each Period (dot plot and bar graph)
   - will need to use gridextra package to combine these plots
   
 5. Purpose Over Years
-  - faceted by country
+  - facet by country
   - would be ridge density plots
   - get counts of different purposes grouped by country
