@@ -14,9 +14,12 @@ World Map with Point for Each Period (dot plot and bar graph)
   
 
 2. World Map of All Bombs (dot plot)
-  - shows all bombs for all years
-  - color code points by country
-  - maybe size by avg yield or something
+  a. shows all bombs for all years
+  b. color code points by country
+  c. maybe size by avg yield or something
+  d. interactivity
+      - can click on a country to zoom in at the points
+      - have geom text show name, year, etc...
   
 3. Top 10 Bombs
   - show box plot with error bars being low and high yield
