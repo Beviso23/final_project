@@ -6,7 +6,7 @@ Ideas for Plots:
 World Map with Point for Each Period (dot plot and bar graph)
   a.years grouped by event and faceted
       - World War II
-      - Cuban Missle Crisis
+      - Cuban Missile Crisis
       - Vietnam War
       - Korean War
       - Post Cold War
