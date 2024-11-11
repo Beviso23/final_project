@@ -31,6 +31,9 @@ explosions <- read_csv("data/nuclear_explosions.csv")
 ```{r OB}
 # Owen's graph
 
+# Use leaflet
+# What info will reveal when clicking on the circles?
+# Zooming out merges/combines the circles
 
 ```
 
