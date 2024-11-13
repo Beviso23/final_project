@@ -16,6 +16,10 @@ knitr::opts_chunk$set(echo = TRUE,
 ```{r libraries}
 library(tidyverse)
 library(htmlwidgets)
+library(leaflet)
+library(leaflegend)
+library(purrr)
+library(viridis)
 ```
 
 ```{r data}
@@ -31,11 +35,66 @@ explosions <- read_csv("data/nuclear_explosions.csv")
 ```{r OB}
 # Owen's graph
 
-# Use leaflet
-# What info will reveal when clicking on the circles?
-# Zooming out merges/combines the circles
+# Github link: https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-08-20
 
+avg <- function(x, y) {
+  num <- (x + y) / 2
+}
+
+explosions2 <- explosions %>% 
+  mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
+                        ~ avg(.x, .y))) %>% 
+  mutate(scaled_average = log(average))
+
+explosions2
+
+#pal <- colorFactor(palette = viridis(n = 5), 
+ #                  domain = explosions2$scaled_average)
+
+
+# Force explosion size on map to be relevant to fallout spread? Would need new dataset.
+# Would need a new shape as well. 
+
+leaflet() %>% 
+  addTiles() %>% 
+  addProviderTiles("Thunderforest.Landscape") %>% 
+  addCircleMarkers(data = explosions2, lat = ~ latitude, lng = ~ longitude,
+                   radius = ~ scaled_average 
+                   #clusterOptions = markerClusterOptions()
+                   #popup = ~ popup_info
+                   #color = ~ pal(scaled_average)
+                   ) 
+  #addLegend(data = explosions,
+            #pal = pal, values = ~ scaled_average,
+            #colors = explosions$yield_upper,
+            #title = "Worldwide nuclear explosions")
+
+
+numPal <- colorFactor('viridis', explosions2$average)
+leaflet(explosions2) %>%
+  addTiles() %>%
+  addSymbolsSize(values = ~ average,
+                 lat = ~ latitude, 
+                 lng = ~ longitude,
+                 shape = 'circle',
+                 color = ~ numPal(average),
+                 fillColor = ~ numPal(average),
+                 opacity = .5,
+                 baseSize = 1)
 ```
+  addLegendSize(
+    values = ~ 10^(average),
+    pal = numPal,
+    title = 'Magnitude',
+    baseSize = 1,
+    shape = 'circle',
+    orientation = 'horizontal',
+    opacity = .5,
+    fillOpacity = .3,
+    position = 'bottomleft',
+    breaks = 5)
+  
+  
 
 ```{r AG}
 # Arielle's graph
