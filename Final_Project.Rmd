@@ -44,9 +44,20 @@ avg <- function(x, y) {
 explosions2 <- explosions %>% 
   mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
                         ~ avg(.x, .y))) %>% 
-  mutate(scaled_average = log(average))
+  mutate(scaled_average = log(average)) %>% 
+  mutate(popup_info = paste0("[b] This is a test: [/b]", scaled_average))
 
 explosions2
+
+summarize(explosions2,
+          mean = mean(average, na.rm = TRUE),
+          min = min(average, na.rm = TRUE),
+          max = max(average, na.rm = TRUE))
+
+summarize(explosions2,
+          mean = mean(scaled_average, na.rm = TRUE),
+          min = min(scaled_average, na.rm = TRUE),
+          max = max(scaled_average, na.rm = TRUE))
 
 #pal <- colorFactor(palette = viridis(n = 5), 
  #                  domain = explosions2$scaled_average)
@@ -59,9 +70,8 @@ leaflet() %>%
   addTiles() %>% 
   addProviderTiles("Thunderforest.Landscape") %>% 
   addCircleMarkers(data = explosions2, lat = ~ latitude, lng = ~ longitude,
-                   radius = ~ scaled_average 
-                   #clusterOptions = markerClusterOptions()
-                   #popup = ~ popup_info
+                   radius = ~ scaled_average, 
+                   popup = ~ popup_info
                    #color = ~ pal(scaled_average)
                    ) 
   #addLegend(data = explosions,
