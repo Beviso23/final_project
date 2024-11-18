@@ -41,36 +41,19 @@ avg <- function(x, y) {
   num <- (x + y) / 2
 }
 
+# Data tidying
 explosions2 <- explosions %>% 
   mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
                         ~ avg(.x, .y))) %>% 
   mutate(scaled_average = average / 1000) %>% 
-  mutate(popup_info = paste0("[b] This is a test: [/b]", scaled_average))
+  mutate(popup_info = paste(sep = "<br/>",
+                            "<b>This is a test: </b>", scaled_average),
+                            "<b>Another test: </b>", region)
 
-explosions2
-
-summarize(explosions2,
-          mean = mean(average, na.rm = TRUE),
-          min = min(average, na.rm = TRUE),
-          max = max(average, na.rm = TRUE))
-
-explosions2 %>% 
-  ggplot() +
-  geom_histogram(aes(x = average), binwidth = 1000)
-
-explosions2 %>% 
-  ggplot() +
-  geom_histogram(aes(x = scaled_average))
-
-summarize(explosions2,
-          mean = mean(scaled_average, na.rm = TRUE),
-          min = min(scaled_average, na.rm = TRUE),
-          max = max(scaled_average, na.rm = TRUE))
-
+# Create a palette for explosion sizes
 pal <- colorNumeric(palette = 'viridis', 
                    domain = explosions2$scaled_average,
                    na.color = NA)
-
 
 # To do:
 # Add popups
@@ -88,33 +71,8 @@ leaflet() %>%
             pal = pal,
             values = ~ scaled_average,
             title = "Worldwide nuclear explosions")
-
-
-numPal <- colorFactor('viridis', explosions2$average)
-leaflet(explosions2) %>%
-  addTiles() %>%
-  addSymbolsSize(values = ~ average,
-                 lat = ~ latitude, 
-                 lng = ~ longitude,
-                 shape = 'circle',
-                 color = ~ numPal(average),
-                 fillColor = ~ numPal(average),
-                 opacity = .5,
-                 baseSize = 1)
 ```
-  addLegendSize(
-    values = ~ 10^(average),
-    pal = numPal,
-    title = 'Magnitude',
-    baseSize = 1,
-    shape = 'circle',
-    orientation = 'horizontal',
-    opacity = .5,
-    fillOpacity = .3,
-    position = 'bottomleft',
-    breaks = 5)
-  
-  
+
 
 ```{r AG}
 # Arielle's graph
