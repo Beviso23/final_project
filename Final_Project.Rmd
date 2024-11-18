@@ -44,7 +44,7 @@ avg <- function(x, y) {
 explosions2 <- explosions %>% 
   mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
                         ~ avg(.x, .y))) %>% 
-  mutate(scaled_average = log(average)) %>% 
+  mutate(scaled_average = average / 1000) %>% 
   mutate(popup_info = paste0("[b] This is a test: [/b]", scaled_average))
 
 explosions2
@@ -54,30 +54,40 @@ summarize(explosions2,
           min = min(average, na.rm = TRUE),
           max = max(average, na.rm = TRUE))
 
+explosions2 %>% 
+  ggplot() +
+  geom_histogram(aes(x = average), binwidth = 1000)
+
+explosions2 %>% 
+  ggplot() +
+  geom_histogram(aes(x = scaled_average))
+
 summarize(explosions2,
           mean = mean(scaled_average, na.rm = TRUE),
           min = min(scaled_average, na.rm = TRUE),
           max = max(scaled_average, na.rm = TRUE))
 
-#pal <- colorFactor(palette = viridis(n = 5), 
- #                  domain = explosions2$scaled_average)
+pal <- colorNumeric(palette = 'viridis', 
+                   domain = explosions2$scaled_average,
+                   na.color = NA)
 
 
-# Force explosion size on map to be relevant to fallout spread? Would need new dataset.
-# Would need a new shape as well. 
+# To do:
+# Add popups
+# Add better title.
 
 leaflet() %>% 
   addTiles() %>% 
   addProviderTiles("Thunderforest.Landscape") %>% 
   addCircleMarkers(data = explosions2, lat = ~ latitude, lng = ~ longitude,
                    radius = ~ scaled_average, 
-                   popup = ~ popup_info
-                   #color = ~ pal(scaled_average)
-                   ) 
-  #addLegend(data = explosions,
-            #pal = pal, values = ~ scaled_average,
-            #colors = explosions$yield_upper,
-            #title = "Worldwide nuclear explosions")
+                   popup = ~ popup_info,
+                   stroke = FALSE, fillOpacity = 0.5,
+                   color = ~ pal(scaled_average)) %>% 
+  addLegend(data = explosions2,
+            pal = pal,
+            values = ~ scaled_average,
+            title = "Worldwide nuclear explosions")
 
 
 numPal <- colorFactor('viridis', explosions2$average)
