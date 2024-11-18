@@ -46,9 +46,8 @@ explosions2 <- explosions %>%
   mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
                         ~ avg(.x, .y))) %>% 
   mutate(scaled_average = average / 1000) %>% 
-  mutate(popup_info = paste(sep = "<br/>",
-                            "<b>This is a test: </b>", scaled_average),
-                            "<b>Another test: </b>", region)
+  mutate(popup_info = paste0("<b>This is a test: </b>", scaled_average, "<br/>",
+                             "<b>Another test: </b>", region))
 
 # Create a palette for explosion sizes
 pal <- colorNumeric(palette = 'viridis', 
@@ -56,8 +55,9 @@ pal <- colorNumeric(palette = 'viridis',
                    na.color = NA)
 
 # To do:
-# Add popups
-# Add better title.
+# Fix popups
+# Fix title
+# Fix scale so that values < 1 will still show up as 1
 
 leaflet() %>% 
   addTiles() %>% 
@@ -70,7 +70,7 @@ leaflet() %>%
   addLegend(data = explosions2,
             pal = pal,
             values = ~ scaled_average,
-            title = "Worldwide nuclear explosions")
+            title = "Worldwide nuclear explosions <br/> Megatonnes of TNT")
 ```
 
 
