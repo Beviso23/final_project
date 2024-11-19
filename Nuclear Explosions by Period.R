@@ -1,3 +1,5 @@
+#load packages
+
 library(tidyverse)
 library(vistime)
 library(ggplot2)
@@ -5,10 +7,14 @@ library(leaflet)
 library(ggthemes)
 library(ggpubr)
 
+#load date
+
 globe <- map_data("world")
 
 major_events <- read.csv("Major Events.csv")
 explosions <- read.csv("nuclear_explosions.csv")
+
+#Generate Separate Datasets by Periods
 
 explosion_event <- major_events %>%
   full_join(explosions, by = "year")
@@ -49,10 +55,14 @@ region_1979_1989 <- explosions_1979_1989 %>%
   group_by(region) %>%
   summarize(count=n())
 
+#generate individual scaled color palettes
+
 pal1<- leaflet::colorNumeric("viridis", domain = explosions_1945_1954$count)
 pal2<- leaflet::colorNumeric("viridis", domain = explosions_1953_1959$count)
 pal3<- leaflet::colorNumeric("viridis", domain = explosions_1955_1975$count)
 pal4<- leaflet::colorNumeric("viridis", domain = explosions_1979_1989$count)
+
+#graph with leaflet to generate layers by period
 
 leaflet() %>%
   addTiles() %>%
@@ -83,7 +93,8 @@ leaflet() %>%
   addLayersControl(overlayGroups = c("1945-1954", "1953-1959", "1955-1975", "1979-1989"), position = "topright", options = layersControlOptions(collapsed = F))
 
 
-#looking at trend of each country from 1945 to 1998
+#plot looking at trend of each country from 1945 to 1998
+
 counts_by_year <- explosion_event %>%
   filter(!is.na(region)) %>%
   group_by(year, country) %>%
@@ -92,9 +103,6 @@ counts_by_year <- explosion_event %>%
 
 PAK_events <- counts_by_year %>%
   filter(country == "PAKIST")
-
-#calplot, series of rectangles of different lengths with text saying what the event is
-#use geom_rect or geom_polygon, something like that
 
 nukes_by_year <- ggplot(data=counts_by_year, aes (x= year, y = n, color=country)) +
   geom_line(linewidth=1) +
@@ -120,5 +128,3 @@ wars<- gg_vistime(timeline, col.event = "Position", col.group = "Name") +
 
 
 ggarrange(nukes_by_year, wars, nrow=2, heights = c(3, 1.5), align = 'v')
-
-?gg_vistime()
