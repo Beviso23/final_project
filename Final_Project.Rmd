@@ -16,6 +16,10 @@ knitr::opts_chunk$set(echo = TRUE,
 ```{r libraries}
 library(tidyverse)
 library(htmlwidgets)
+library(leaflet)
+library(leaflegend)
+library(purrr)
+library(viridis)
 ```
 
 ```{r data}
@@ -31,11 +35,44 @@ explosions <- read_csv("data/nuclear_explosions.csv")
 ```{r OB}
 # Owen's graph
 
-# Use leaflet
-# What info will reveal when clicking on the circles?
-# Zooming out merges/combines the circles
+# Github link: https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-08-20
 
+avg <- function(x, y) {
+  num <- (x + y) / 2
+}
+
+# Data tidying
+explosions2 <- explosions %>% 
+  mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
+                        ~ avg(.x, .y))) %>% 
+  mutate(scaled_average = average / 1000) %>% 
+  mutate(popup_info = paste0("<b>This is a test: </b>", scaled_average, "<br/>",
+                             "<b>Another test: </b>", region))
+
+# Create a palette for explosion sizes
+pal <- colorNumeric(palette = 'viridis', 
+                   domain = explosions2$scaled_average,
+                   na.color = NA)
+
+# To do:
+# Fix popups
+# Fix title
+# Fix scale so that values < 1 will still show up as 1
+
+leaflet() %>% 
+  addTiles() %>% 
+  addProviderTiles("Thunderforest.Landscape") %>% 
+  addCircleMarkers(data = explosions2, lat = ~ latitude, lng = ~ longitude,
+                   radius = ~ scaled_average, 
+                   popup = ~ popup_info,
+                   stroke = FALSE, fillOpacity = 0.5,
+                   color = ~ pal(scaled_average)) %>% 
+  addLegend(data = explosions2,
+            pal = pal,
+            values = ~ scaled_average,
+            title = "Worldwide nuclear explosions <br/> Megatonnes of TNT")
 ```
+
 
 ```{r AG}
 # Arielle's graph

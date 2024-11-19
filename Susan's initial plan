@@ -1,0 +1,14 @@
+Susan's graph
+1. Since purpose column had a few combined ones such as PNE:PLO and PNE:V filtered
+these out of data and only used, "COMBAT", "FMS", "ME", "PNE", "SAM", "SSE", "WE"
+"TRANSP", "WR" for a total of nine categories so recommend anyone using purpose
+use the above list for consistency.
+
+2. Created tibble of 'country', 'purpose', 'upper_limit', and 'number_instances'
+
+3. Using the above tibble, created plot of Density Ridges of Log-transformed
+Number of Instances by Purposes which actually is a good first draft. 
+
+4. I am also considering comparing the USA versus USSR since these two have a 
+large number of data points and perhaps developing a comparison between the 
+remaining countries to see if any lend themselves to statistically comparing.
