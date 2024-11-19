@@ -22,38 +22,38 @@ explosion_event <- major_events %>%
 explosions_1945_1954 <- explosion_event %>%
   filter(year <= 1954) %>%
   filter(!is.na(region)) %>%
-  left_join(region_1945_1954, by='region')
+  left_join(region_1945_1954, by = 'region')
 
 region_1945_1954 <- explosions_1945_1954 %>%
   group_by(region) %>%
-  summarize(count=n())
+  summarize(count = n())
 
 explosions_1953_1959 <- explosion_event %>%
-  filter(year >= 1953 & year <=1959) %>%
+  filter(year >= 1953 & year <= 1959) %>%
   filter(!is.na(region)) %>%
-  left_join(region_1953_1959, by='region')
+  left_join(region_1953_1959, by = 'region')
 
 region_1953_1959 <- explosions_1953_1959 %>%
   group_by(region) %>%
-  summarize(count=n())
+  summarize(count = n())
 
 explosions_1955_1975 <- explosion_event %>%
-  filter(year >= 1955 & year <=1975) %>%
+  filter(year >= 1955 & year <= 1975) %>%
   filter(!is.na(region)) %>%
-  left_join(region_1955_1975, by='region')
+  left_join(region_1955_1975, by = 'region')
 
 region_1955_1975 <- explosions_1955_1975 %>%
   group_by(region) %>%
-  summarize(count=n())
+  summarize(count = n())
 
 explosions_1979_1989 <- explosion_event %>%
-  filter(year >= 1979 & year <=1989) %>%
+  filter(year >= 1979 & year <= 1989) %>%
   filter(!is.na(region))%>%
-  left_join(region_1979_1989, by='region')
+  left_join(region_1979_1989, by = 'region')
 
 region_1979_1989 <- explosions_1979_1989 %>%
   group_by(region) %>%
-  summarize(count=n())
+  summarize(count = n())
 
 #generate individual scaled color palettes
 
@@ -98,21 +98,21 @@ leaflet() %>%
 counts_by_year <- explosion_event %>%
   filter(!is.na(region)) %>%
   group_by(year, country) %>%
-  summarize(n=n()) %>%
-  mutate(year=as.numeric(year))
+  summarize(n = n()) %>%
+  mutate(year = as.numeric(year))
 
 PAK_events <- counts_by_year %>%
   filter(country == "PAKIST")
 
-nukes_by_year <- ggplot(data=counts_by_year, aes (x= year, y = n, color=country)) +
-  geom_line(linewidth=1) +
+nukes_by_year <- ggplot(data=counts_by_year, aes (x = year, y = n, color = country)) +
+  geom_line(linewidth = 1) +
   geom_point(data = PAK_events, color="orange") +
   theme_bw() +
   scale_x_continuous(breaks = seq(1945, 2000, 5), limits = c(1945, 1998)) +
-  scale_color_manual(breaks = c("CHINA", "FRANCE", "INDIA", "PAKIST", "UK", "USA", "USSR"), values=c("hotpink3", "blue", "green3", "orange", "steelblue", "black", "red3"))+
-  theme(panel.background=element_blank(),,panel.grid.major=element_blank(),
-         panel.grid.minor=element_blank(),plot.background=element_blank()) +
-  theme(legend.position="top") +
+  scale_color_manual(breaks = c("CHINA", "FRANCE", "INDIA", "PAKIST", "UK", "USA", "USSR"), values = c("hotpink3", "blue", "green3", "orange", "steelblue", "black", "red3"))+
+  theme(panel.background = element_blank(),,panel.grid.major = element_blank(),
+         panel.grid.minor = element_blank(),plot.background = element_blank()) +
+  theme(legend.position = "top") +
   guides(colour = guide_legend(nrow = 1))
 
 timeline <- data.frame(Position = rep(c("", "", "", "", "", "", "", "", ""), each = 1),
@@ -124,7 +124,7 @@ timeline <- data.frame(Position = rep(c("", "", "", "", "", "", "", "", ""), eac
 wars<- gg_vistime(timeline, col.event = "Position", col.group = "Name") +
   scale_x_datetime(date_breaks = "5 years", date_labels = "%Y", limits = as.POSIXct(c("1945-01-01", "2000-01-01"))) +
   theme_tufte() +
-  theme(axis.text.x=element_blank(), axis.ticks.x = element_blank()) 
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) 
 
 
-ggarrange(nukes_by_year, wars, nrow=2, heights = c(3, 1.5), align = 'v')
+ggarrange(nukes_by_year, wars, nrow = 2, heights = c(3, 1.5), align = 'v')
