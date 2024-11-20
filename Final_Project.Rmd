@@ -43,17 +43,36 @@ avg <- function(x, y) {
 
 # Data tidying
 explosions2 <- explosions %>% 
+  mutate(map_purpose = if_else(purpose == "COMBAT",
+                               "WWII bombs dropped over Japan", purpose),
+         map_purpose = if_else(purpose == "FMS",
+                               "Soviet test studying phenomenon of nuclear explosion", purpose),
+         map_purpose = if_else(purpose == "ME",
+                               "Military Exercise", purpose),
+         map_purpose = if_else(purpose == "PNE",
+                               "Peaceful nuclear explosion", purpose),
+         map_purpose = if_else(purpose == "SAM",
+                               "Soviet accident test", purpose),
+         map_purpose = if_else(purpose == "TRANSP",
+                               "Transportation-storage purpose", purpose),
+         map_purpose = if_else(purpose == "WE", 
+                               "Evaluate effects of nuclear detonation on various targets", purpose),
+         map_purpose = if_else(purpose == "WR",
+                               "Weapons development program", purpose)) %>% 
   mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
                         ~ avg(.x, .y))) %>% 
   mutate(scaled_average = average / 1000) %>% 
-  mutate(popup_info = paste0("<b>This is a test: </b>", scaled_average, "<br/>",
-                             "<b>Another test: </b>", region))
+  mutate(popup_info = paste0("<b>Estimated yield (Mt TNT): </b>", scaled_average, "<br/>",
+                             "<b>Purpose: </b>", map_purpose, "<br/>",
+                             "<b>Country: </b>", country, "<br/>",
+                             "<b>Region: </b>", region, "<br/>",
+                             "<b>Year: </b>", year, "<br/>"))
 
 # Create a palette for explosion sizes
 pal <- colorNumeric(palette = 'viridis', 
                    domain = explosions2$scaled_average,
                    na.color = NA)
-
+explosions2
 # To do:
 # Fix popups
 # Fix title
