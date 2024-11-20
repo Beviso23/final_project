@@ -10,6 +10,10 @@ library(ggpubr)
 #load date
 
 globe <- map_data("world")
+getwd()
+setwd('..')
+getwd()
+setwd('data')
 
 major_events <- read.csv("Major Events.csv")
 explosions <- read.csv("nuclear_explosions.csv")
@@ -21,77 +25,77 @@ explosion_event <- major_events %>%
 
 explosions_1945_1954 <- explosion_event %>%
   filter(year <= 1954) %>%
-  filter(!is.na(region)) %>%
-  left_join(region_1945_1954, by = 'region')
+  filter(!is.na(region)) 
 
 region_1945_1954 <- explosions_1945_1954 %>%
   group_by(region) %>%
-  summarize(count = n())
+  summarize(count = n())%>%
+  right_join(explosions_1945_1954, by = 'region')
 
 explosions_1953_1959 <- explosion_event %>%
   filter(year >= 1953 & year <= 1959) %>%
-  filter(!is.na(region)) %>%
-  left_join(region_1953_1959, by = 'region')
+  filter(!is.na(region))
 
 region_1953_1959 <- explosions_1953_1959 %>%
   group_by(region) %>%
-  summarize(count = n())
+  summarize(count = n()) %>%
+  right_join(explosions_1953_1959, by = 'region')
 
 explosions_1955_1975 <- explosion_event %>%
   filter(year >= 1955 & year <= 1975) %>%
-  filter(!is.na(region)) %>%
-  left_join(region_1955_1975, by = 'region')
+  filter(!is.na(region))
 
 region_1955_1975 <- explosions_1955_1975 %>%
   group_by(region) %>%
-  summarize(count = n())
+  summarize(count = n())%>%
+  right_join(explosions_1955_1975, by = 'region') 
 
 explosions_1979_1989 <- explosion_event %>%
   filter(year >= 1979 & year <= 1989) %>%
-  filter(!is.na(region))%>%
-  left_join(region_1979_1989, by = 'region')
+  filter(!is.na(region))
 
 region_1979_1989 <- explosions_1979_1989 %>%
   group_by(region) %>%
-  summarize(count = n())
+  summarize(count = n())%>%
+  right_join(explosions_1979_1989, by = 'region')
 
 #generate individual scaled color palettes
 
-pal1<- leaflet::colorNumeric("viridis", domain = explosions_1945_1954$count)
-pal2<- leaflet::colorNumeric("viridis", domain = explosions_1953_1959$count)
-pal3<- leaflet::colorNumeric("viridis", domain = explosions_1955_1975$count)
-pal4<- leaflet::colorNumeric("viridis", domain = explosions_1979_1989$count)
+pal1<- leaflet::colorNumeric("viridis", domain = region_1945_1954$count)
+pal2<- leaflet::colorNumeric("viridis", domain = region_1953_1959$count)
+pal3<- leaflet::colorNumeric("viridis", domain = region_1955_1975$count)
+pal4<- leaflet::colorNumeric("viridis", domain = region_1979_1989$count)
 
 #graph with leaflet to generate layers by period
 
 leaflet() %>%
   addTiles() %>%
-  addCircleMarkers(data = explosions_1945_1954, ~longitude, ~latitude , radius = 3, color = ~pal1(count), fillOpacity = 0.7,group = "1945-1954")%>%
-  addLegend(data = explosions_1945_1954,
+  addCircleMarkers(data = region_1945_1954, ~longitude, ~latitude , radius = 3, color = ~pal1(count), fillOpacity = 0.7,group = "1945-1954")%>%
+  addLegend(data = region_1945_1954,
             position = "bottomright",
             pal = pal1, values = ~count,
             title = "# of Events",
             opacity = 1, group="1945-1954") %>%
-  addCircleMarkers(data = explosions_1953_1959, ~longitude, ~latitude , radius = 3, color = ~pal2(count), fillOpacity = 0.7,group = "1953-1959")%>%
-  addLegend(data = explosions_1953_1959,
+  addCircleMarkers(data = region_1953_1959, ~longitude, ~latitude , radius = 3, color = ~pal2(count), fillOpacity = 0.7,group = "1953-1959")%>%
+  addLegend(data = region_1953_1959,
             position = "bottomright",
             pal = pal2, values = ~count,
             title = "# of Events",
             opacity = 1, group="1953-1959") %>%
-  addCircleMarkers(data = explosions_1955_1975, ~longitude, ~latitude , radius = 3, color = ~pal3(count), fillOpacity = 0.7,group = "1955-1975")%>%
-  addLegend(data = explosions_1955_1975,
+  addCircleMarkers(data = region_1955_1975, ~longitude, ~latitude , radius = 3, color = ~pal3(count), fillOpacity = 0.7,group = "1955-1975")%>%
+  addLegend(data = region_1955_1975,
             position = "bottomright",
             pal = pal3, values = ~count,
             title = "# of Events",
             opacity = 1, group = "1955-1975") %>%
-  addCircleMarkers(data = explosions_1979_1989, ~longitude, ~latitude , radius = 3, color = ~pal4(count), fillOpacity = 0.7,group = "1979-1989")%>%
-  addLegend(data = explosions_1979_1989,
+  addCircleMarkers(data = region_1979_1989, ~longitude, ~latitude , radius = 3, color = ~pal4(count), fillOpacity = 0.7,group = "1979-1989")%>%
+  addLegend(data = region_1979_1989,
             position = "bottomright",
             pal = pal4, values = ~count,
             title = "# of Events",
             opacity = 1, group = "1979-1989") %>%
-  addLayersControl(overlayGroups = c("1945-1954", "1953-1959", "1955-1975", "1979-1989"), position = "topright", options = layersControlOptions(collapsed = F))
-
+  addLayersControl(overlayGroups = c("1945-1954", "1953-1959", "1955-1975", "1979-1989"), position = "topright", options = layersControlOptions(collapsed = F)) %>%
+  hideGroup(c("1953-1959", "1955-1975", "1979-1989"))
 
 #plot looking at trend of each country from 1945 to 1998
 
