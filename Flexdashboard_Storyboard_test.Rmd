@@ -213,13 +213,13 @@ leaflet() %>%
 ***
 The following map shows the number of nuclear tests across the globe during four periods:
 
--The End of WWII through the end of the Korean War
+-The End of WWII through the end of the Korean War (1945-1954)
 
--The Cuban Revolution
+-The Cuban Revolution (1953-1959)
 
--The Vietnam War
+-The Vietnam War (1955-1975)
 
--The Iran-Iraq War and Soviet-Afghan War
+-The Iran-Iraq War and Soviet-Afghan War (1979-1989)
 
 
 ### Frame 3
