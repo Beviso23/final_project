@@ -3,8 +3,6 @@ title: "Storyboard"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
-    social: menu
-    source: embed
 ---
 
 ```{r setup, include=FALSE}
@@ -15,12 +13,15 @@ library(leaflet)
 library(leaflegend)
 library(purrr)
 library(viridis)
-library(vistime)
-library(ggplot2)
-library(ggthemes)
-library(ggpubr)
+library(leaflegend)
 library(plotly)
-
+library(scales)
+library(forcats)
+library(ggplot2)
+library(ggpubr)
+library(ggridges)
+library(ggthemes)
+library(vistime)
 explosions <- read_csv("data/nuclear_explosions.csv")
 ```
 
@@ -38,23 +39,17 @@ avg <- function(x, y) {
 
 # Data tidying
 explosions2 <- explosions %>% 
-  # Rename 'purpose' as indicated in data README
-  mutate(map_purpose = if_else(purpose == "COMBAT",
-                               "WWII bombs dropped over Japan", purpose),
-         map_purpose = if_else(purpose == "FMS",
-                               "Soviet test studying phenomenon of nuclear explosion", purpose),
-         map_purpose = if_else(purpose == "ME",
-                               "Military Exercise", purpose),
-         map_purpose = if_else(purpose == "PNE",
-                               "Peaceful nuclear explosion", purpose),
-         map_purpose = if_else(purpose == "SAM",
-                               "Soviet accident test", purpose),
-         map_purpose = if_else(purpose == "TRANSP",
-                               "Transportation-storage purpose", purpose),
-         map_purpose = if_else(purpose == "WE", 
-                               "Evaluate effects of nuclear detonation on various targets", purpose),
-         map_purpose = if_else(purpose == "WR",
-                               "Weapons development program", purpose)) %>% 
+  # Rename purpose to something more human readable
+  mutate(map_purpose = case_when(
+  purpose == "COMBAT" ~ "WWII bombs dropped over Japan",
+  purpose == "FMS" ~ "Soviet test studying phenomenon of nuclear explosion",
+  purpose == "ME" ~ "Military Exercise",
+  purpose == "PNE" ~ "Peaceful nuclear explosion",
+  purpose == "SAM" ~ "Soviet accident test",
+  purpose == "TRANSP" ~ "Transportation-storage purpose",
+  purpose == "WE" ~ "Evaluate effects of nuclear detonation on various targets",
+  purpose == "WR" ~ "Weapons development program",
+  TRUE ~ purpose)) %>% 
   mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
                         ~ avg(.x, .y))) %>% 
   mutate(scaled_average = average / 1000) %>%
@@ -89,67 +84,50 @@ leaflet() %>%
 ```
 
 
-### Nuclear Explosions Per Country
+### Nuclear Explosions per Country
 
-
-
-```{r, echo=FALSE, fig.width=6.5, fig.height=7.5, vertical_layout: scroll}
-
+```{r, echo=FALSE, fig.width=6.5, fig.height=7.5}
 major_events <- read.csv("data/Major Events.csv")
-
 #Generate Separate Datasets by Periods
-
 explosion_event <- major_events %>%
   full_join(explosions, by = "year")
-
 explosions_1945_1954 <- explosion_event %>%
   filter(year <= 1954) %>%
   filter(!is.na(region)) 
-
 region_1945_1954 <- explosions_1945_1954 %>%
   group_by(region) %>%
   summarize(count = n())%>%
   right_join(explosions_1945_1954, by = 'region')
-
 explosions_1953_1959 <- explosion_event %>%
   filter(year >= 1953 & year <= 1959) %>%
   filter(!is.na(region))
-
 region_1953_1959 <- explosions_1953_1959 %>%
   group_by(region) %>%
   summarize(count = n()) %>%
   right_join(explosions_1953_1959, by = 'region')
-
 explosions_1955_1975 <- explosion_event %>%
   filter(year >= 1955 & year <= 1975) %>%
   filter(!is.na(region))
-
 region_1955_1975 <- explosions_1955_1975 %>%
   group_by(region) %>%
   summarize(count = n())%>%
   right_join(explosions_1955_1975, by = 'region') 
-
 explosions_1979_1989 <- explosion_event %>%
   filter(year >= 1979 & year <= 1989) %>%
   filter(!is.na(region))
-
 region_1979_1989 <- explosions_1979_1989 %>%
   group_by(region) %>%
   summarize(count = n())%>%
   right_join(explosions_1979_1989, by = 'region')
-
 #plot looking at trend of each country from 1945 to 1998
-
 counts_by_year <- explosion_event %>%
   filter(!is.na(region)) %>%
   group_by(year, country) %>%
   summarize(n = n()) %>%
   mutate(year = as.numeric(year)) %>%
   mutate(country = recode(country, CHINA = "China", FRANCE = "France", INDIA = "India", PAKIST = "Pakistan"))
-
 PAK_events <- counts_by_year %>%
   filter(country == "Pakistan")
-
 nukes_by_year <- ggplot(data=counts_by_year, aes (x = year, y = n, color = country)) +
   geom_line(linewidth = 1) +
   geom_point(data = PAK_events, color="orange") +
@@ -161,41 +139,27 @@ nukes_by_year <- ggplot(data=counts_by_year, aes (x = year, y = n, color = count
          panel.grid.minor = element_blank(),plot.background = element_blank()) +
   theme(legend.position = "top", legend.title = element_blank()) +
   guides(colour = guide_legend(nrow = 1)) 
-
 timeline <- data.frame(Position = rep(c("", "", "", "", "", "", "", "", ""), each = 1),
                    Name = c("World War II", "Chinese Civil War", "First IndoChina War", "Korean War", "Cuban Revolution", "Vietnam War", "Lebanese Civil War", "Soviet-Afghan War", "Iran-Iraq War"),
                    start = c("1945-01-01", "1945-01-01", "1946-01-01", "1951-01-01", "1953-01-01", "1955-01-01", "1975-01-01", "1979-01-01", "1980-01-01" ),
                    end = c("1945-12-31", "1949-12-31", "1954-12-31", "1954-12-31", "1959-12-31", "1975-12-31", "1990-12-31", "1989-12-31", "1988-12-31"),
                    color = c("lightgrey", "azure2", "skyblue", "skyblue2", "steelblue","steelblue4",  "blue",  "blue3", "navy"))
-
 wars<- gg_vistime(timeline, col.event = "Position", col.group = "Name") +
   scale_x_datetime(date_breaks = "5 years", date_labels = "%Y", limits = as.POSIXct(c("1945-01-01", "2000-01-01"))) +
   theme_tufte() +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
   theme()
-
-
-Explosions_Per_Year <- ggarrange(nukes_by_year, wars, nrow = 2, heights = c(3, 1.5), align = 'v')
-
-ggplotly(Explosions_Per_Year)
-
-
+ggarrange(nukes_by_year, wars, nrow = 2, heights = c(3, 1.5), align = 'v')
 ```
-*** 
-
-From 1945-1998, the number of nuclear bomb tests drastically increased over time.
 
 ### Explosions Per Period
 
 ```{r}
-
 pal1<- leaflet::colorNumeric("viridis", domain = region_1945_1954$count)
 pal2<- leaflet::colorNumeric("viridis", domain = region_1953_1959$count)
 pal3<- leaflet::colorNumeric("viridis", domain = region_1955_1975$count)
 pal4<- leaflet::colorNumeric("viridis", domain = region_1979_1989$count)
-
 #graph with leaflet to generate layers by period
-
 leaflet() %>%
   addTiles() %>%
   addCircleMarkers(data = region_1945_1954, ~longitude, ~latitude , radius = 3, color = ~pal1(count), fillOpacity = 0.7,group = "1945-1954")%>%
@@ -227,6 +191,49 @@ leaflet() %>%
 
 ```
 
-*** 
+### Frame 3
 
-From 1945-1998, the number of nuclear bomb tests drastically increased over time.
+```{r}
+purpose <- explosions %>%
+  group_by(purpose) %>%
+  summarise(number_instances = n(), .groups = "drop")
+```
+```{r}
+top_5_purposes <- purpose %>%
+  arrange(desc(number_instances)) %>%
+  slice_head(n = 5)
+```
+```{r}
+top_5_purposes_data <- explosions %>%
+  dplyr::filter(purpose %in% top_5_purposes$purpose) %>%
+  # Join with the `top_5_purposes` to get `number_instances` from the purpose dataset
+  left_join(top_5_purposes, by = "purpose") %>%
+  select(purpose, number_instances, country, yield_upper)
+```
+```{r}
+top_5_purposes_data <-  top_5_purposes_data %>%
+  mutate(
+    purpose = recode(purpose,
+                     "FMS" = "Soviet test",
+                     "PNE" = "Peaceful nuclear explosion",
+                     "SE" = "Accidental safety testing",
+                     "WE" = "Target nuclear detonation",
+                     "WR" = "Weapons development")
+  )
+```
+```{r}
+ggplot(top_5_purposes_data, aes(x = `number_instances`, y = `purpose`, fill = after_stat(x), alpha = number_instances)) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, bandwidth = 90) +
+  scale_x_log10(labels = scales::label_number()) +
+  scale_y_discrete(expand = c(0, 0)) +
+  scale_fill_viridis_c(name = "Number of Instances", option = "C") +
+    coord_cartesian(clip = "off") +
+    labs(title = 'Instances of Nuclear Testing') +
+      theme_ridges(font_size = 13, grid = TRUE) +
+    scale_x_continuous(labels = label_number()) +
+    theme(axis.title.y = element_blank(),
+          panel.background = element_rect(fill = "lightgray", color = "black"),
+          plot.background = element_rect(fill = "white"),
+          panel.grid = element_line(colour = "gray80", size = 0.5))
+```
+
