@@ -31,23 +31,17 @@ avg <- function(x, y) {
 
 # Data tidying
 explosions2 <- explosions %>% 
-  # Rename 'purpose' as indicated in data README
-  mutate(map_purpose = if_else(purpose == "COMBAT",
-                               "WWII bombs dropped over Japan", purpose),
-         map_purpose = if_else(purpose == "FMS",
-                               "Soviet test studying phenomenon of nuclear explosion", purpose),
-         map_purpose = if_else(purpose == "ME",
-                               "Military Exercise", purpose),
-         map_purpose = if_else(purpose == "PNE",
-                               "Peaceful nuclear explosion", purpose),
-         map_purpose = if_else(purpose == "SAM",
-                               "Soviet accident test", purpose),
-         map_purpose = if_else(purpose == "TRANSP",
-                               "Transportation-storage purpose", purpose),
-         map_purpose = if_else(purpose == "WE", 
-                               "Evaluate effects of nuclear detonation on various targets", purpose),
-         map_purpose = if_else(purpose == "WR",
-                               "Weapons development program", purpose)) %>% 
+  # Rename purpose to something more human readable
+  mutate(map_purpose = case_when(
+  purpose == "COMBAT" ~ "WWII bombs dropped over Japan",
+  purpose == "FMS" ~ "Soviet test studying phenomenon of nuclear explosion",
+  purpose == "ME" ~ "Military Exercise",
+  purpose == "PNE" ~ "Peaceful nuclear explosion",
+  purpose == "SAM" ~ "Soviet accident test",
+  purpose == "TRANSP" ~ "Transportation-storage purpose",
+  purpose == "WE" ~ "Evaluate effects of nuclear detonation on various targets",
+  purpose == "WR" ~ "Weapons development program",
+  TRUE ~ purpose)) %>% 
   mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
                         ~ avg(.x, .y))) %>% 
   mutate(scaled_average = average / 1000) %>%
