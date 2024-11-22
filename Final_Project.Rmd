@@ -43,6 +43,7 @@ avg <- function(x, y) {
 
 # Data tidying
 explosions2 <- explosions %>% 
+  # Rename 'purpose' as indicated in data README
   mutate(map_purpose = if_else(purpose == "COMBAT",
                                "WWII bombs dropped over Japan", purpose),
          map_purpose = if_else(purpose == "FMS",
