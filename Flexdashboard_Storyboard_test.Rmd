@@ -148,8 +148,26 @@ wars<- gg_vistime(timeline, col.event = "Position", col.group = "Name") +
   theme_tufte() +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
   theme()
-ggarrange(nukes_by_year, wars, nrow = 2, heights = c(3, 1.5), align = 'v')
+wars <- ggarrange(nukes_by_year, wars, nrow = 2, heights = c(3, 1.5), align = 'v')
+
+wars
+
+
 ```
+
+<div>
+The following plot shows conflicts
+<div>
+from 1945-1989 and the amount
+<div> 
+of nuclear bombs tested by the 
+<div>
+different countries during 
+<div>
+The Cold War and the many conflicts 
+<div>
+that occurred during that time.
+<div>
 
 ### Explosions Per Period
 
@@ -189,6 +207,18 @@ leaflet() %>%
   hideGroup(c("1953-1959", "1955-1975", "1979-1989"))
 
 ```
+
+***
+The following map shows the number of nuclear tests across the globe during four periods:
+
+-The End of WWII through the end of the Korean War
+
+-The Cuban Revolution
+
+-The Vietnam War
+
+-The Iran-Iraq War and Soviet-Afghan War
+
 
 ### Frame 3
 
