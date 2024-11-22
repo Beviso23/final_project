@@ -1,5 +1,5 @@
 ---
-title: "Storyboard"
+title: "Nuclear Explosions Data"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
@@ -224,7 +224,7 @@ The following map shows the number of nuclear tests across the globe during four
 -The Iran-Iraq War and Soviet-Afghan War (1979-1989)
 
 
-### Frame 3
+### Nuclear Explosions by Purpose
 
 ```{r}
 purpose <- explosions %>%
@@ -270,3 +270,12 @@ ggplot(top_5_purposes_data, aes(x = `number_instances`, y = `purpose`, fill = af
           panel.grid = element_line(colour = "gray80", size = 0.5))
 ```
 
+
+### Arielle's Graph
+```{r}
+# Add code here
+
+
+```
+***
+Add description here
