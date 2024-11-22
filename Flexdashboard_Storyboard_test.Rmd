@@ -206,6 +206,8 @@ leaflet() %>%
   addLayersControl(overlayGroups = c("1945-1954", "1953-1959", "1955-1975", "1979-1989"), position = "topright", options = layersControlOptions(collapsed = F)) %>%
   hideGroup(c("1953-1959", "1955-1975", "1979-1989"))
 
+
+
 ```
 
 ***
