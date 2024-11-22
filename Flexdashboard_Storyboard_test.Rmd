@@ -25,7 +25,7 @@ explosions <- read_csv("data/nuclear_explosions.csv")
 ```
 
 
-### Frame 1
+### World map of nuclear explosions
 
 ```{r}
 # Owen's graph
@@ -81,6 +81,8 @@ leaflet() %>%
             values = ~ plot_scaled_average,
             title = "Worldwide nuclear explosions <br/> Megatonnes of TNT")
 ```
+***
+This map shows each nuclear explosion since 1945. The sizes of the circles are scaled and colored based on the estimated yield in megatonnes of TNT. Each circle has a popup that shows info on the estimated yield, purpose of explosion, country, region, and year.
 
 
 ### Nuclear Explosions per Country
