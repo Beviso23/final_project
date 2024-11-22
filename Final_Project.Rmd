@@ -62,7 +62,8 @@ explosions2 <- explosions %>%
                                "Weapons development program", purpose)) %>% 
   mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
                         ~ avg(.x, .y))) %>% 
-  mutate(scaled_average = average / 1000) %>% 
+  mutate(scaled_average = average / 1000) %>%
+  mutate(plot_scaled_average = ifelse(scaled_average < 1, 1, scaled_average)) %>% 
   mutate(popup_info = paste0("<b>Estimated yield (Mt TNT): </b>", scaled_average, "<br/>",
                              "<b>Purpose: </b>", map_purpose, "<br/>",
                              "<b>Country: </b>", country, "<br/>",
@@ -71,7 +72,7 @@ explosions2 <- explosions %>%
 
 # Create a palette for explosion sizes
 pal <- colorNumeric(palette = 'viridis', 
-                   domain = explosions2$scaled_average,
+                   domain = explosions2$plot_scaled_average,
                    na.color = NA)
 explosions2
 # To do:
@@ -83,13 +84,13 @@ leaflet() %>%
   addTiles() %>% 
   addProviderTiles("Thunderforest.Landscape") %>% 
   addCircleMarkers(data = explosions2, lat = ~ latitude, lng = ~ longitude,
-                   radius = ~ scaled_average, 
+                   radius = ~ plot_scaled_average, 
                    popup = ~ popup_info,
                    stroke = FALSE, fillOpacity = 0.5,
-                   color = ~ pal(scaled_average)) %>% 
+                   color = ~ pal(plot_scaled_average)) %>% 
   addLegend(data = explosions2,
             pal = pal,
-            values = ~ scaled_average,
+            values = ~ plot_scaled_average,
             title = "Worldwide nuclear explosions <br/> Megatonnes of TNT")
 ```
 

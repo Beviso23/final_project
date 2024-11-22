@@ -1,0 +1,96 @@
+---
+title: "Storyboard"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(htmlwidgets)
+library(leaflet)
+library(leaflegend)
+library(purrr)
+library(viridis)
+
+explosions <- read_csv("data/nuclear_explosions.csv")
+```
+
+
+### Frame 1
+
+```{r}
+# Owen's graph
+
+# Github link: https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-08-20
+
+avg <- function(x, y) {
+  num <- (x + y) / 2
+}
+
+# Data tidying
+explosions2 <- explosions %>% 
+  # Rename 'purpose' as indicated in data README
+  mutate(map_purpose = if_else(purpose == "COMBAT",
+                               "WWII bombs dropped over Japan", purpose),
+         map_purpose = if_else(purpose == "FMS",
+                               "Soviet test studying phenomenon of nuclear explosion", purpose),
+         map_purpose = if_else(purpose == "ME",
+                               "Military Exercise", purpose),
+         map_purpose = if_else(purpose == "PNE",
+                               "Peaceful nuclear explosion", purpose),
+         map_purpose = if_else(purpose == "SAM",
+                               "Soviet accident test", purpose),
+         map_purpose = if_else(purpose == "TRANSP",
+                               "Transportation-storage purpose", purpose),
+         map_purpose = if_else(purpose == "WE", 
+                               "Evaluate effects of nuclear detonation on various targets", purpose),
+         map_purpose = if_else(purpose == "WR",
+                               "Weapons development program", purpose)) %>% 
+  mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
+                        ~ avg(.x, .y))) %>% 
+  mutate(scaled_average = average / 1000) %>%
+  mutate(plot_scaled_average = ifelse(scaled_average < 1, 1, scaled_average)) %>% 
+  mutate(popup_info = paste0("<b>Estimated yield (Mt TNT): </b>", scaled_average, "<br/>",
+                             "<b>Purpose: </b>", map_purpose, "<br/>",
+                             "<b>Country: </b>", country, "<br/>",
+                             "<b>Region: </b>", region, "<br/>",
+                             "<b>Year: </b>", year, "<br/>"))
+
+# Create a palette for explosion sizes
+pal <- colorNumeric(palette = 'viridis', 
+                   domain = explosions2$plot_scaled_average,
+                   na.color = NA)
+# To do:
+# Fix popups
+# Fix title
+# Fix scale so that values < 1 will still show up as 1
+
+leaflet() %>% 
+  addTiles() %>% 
+  addProviderTiles("Thunderforest.Landscape") %>% 
+  addCircleMarkers(data = explosions2, lat = ~ latitude, lng = ~ longitude,
+                   radius = ~ plot_scaled_average, 
+                   popup = ~ popup_info,
+                   stroke = FALSE, fillOpacity = 0.5,
+                   color = ~ pal(plot_scaled_average)) %>% 
+  addLegend(data = explosions2,
+            pal = pal,
+            values = ~ plot_scaled_average,
+            title = "Worldwide nuclear explosions <br/> Megatonnes of TNT")
+```
+
+
+### Frame 2
+
+```{r}
+
+```
+
+### Frame 3
+
+```{r}
+
+```
+
