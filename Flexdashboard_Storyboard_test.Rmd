@@ -40,20 +40,35 @@ avg <- function(x, y) {
 explosions2 <- explosions %>% 
   # Rename purpose to something more human readable
   mutate(map_purpose = case_when(
-  purpose == "COMBAT" ~ "WWII bombs dropped over Japan",
-  purpose == "FMS" ~ "Soviet test studying phenomenon of nuclear explosion",
-  purpose == "ME" ~ "Military Exercise",
-  purpose == "PNE" ~ "Peaceful nuclear explosion",
-  purpose == "SAM" ~ "Soviet accident test",
-  purpose == "TRANSP" ~ "Transportation-storage purpose",
-  purpose == "WE" ~ "Evaluate effects of nuclear detonation on various targets",
-  purpose == "WR" ~ "Weapons development program",
-  TRUE ~ purpose)) %>% 
+    purpose == "COMBAT" ~ "WWII bombs dropped over Japan",
+    purpose == "FMS" ~ "Soviet test studying phenomenon of nuclear explosion",
+    purpose == "ME" ~ "Military Exercise",
+    purpose == "PNE" ~ "Peaceful nuclear explosion",
+    purpose == "SAM" ~ "Soviet accident test",
+    purpose == "TRANSP" ~ "Transportation-storage purpose",
+    purpose == "WE" ~ "Evaluate effects of nuclear detonation on various targets",
+    purpose == "WR" ~ "Weapons development program",
+    TRUE ~ purpose)) %>% 
+  mutate(map_type = case_when(
+    type == "ATMOSPH" ~ "Atmospheric",
+    type == "UG" ~ "Underground",
+    type == "BALLOON" ~ "Balloon drop",
+    type == "AIRDROP" ~ "Airplane drop",
+    type == "ROCKET" ~ "Rocket",
+    type == "TOWER" ~ "Constructed tower",
+    type == "WATERSURFACE" ~ "Surface of a water body",
+    type == "BARGE" ~ "Barge boat",
+    type == "SURFACE" ~ "Surface or shallow crater",
+    type == "UW" ~ "Underwater",
+    type == "SHAFT" ~ "Vertical shaft underground",
+    type == "TUNNEL/GALLERY" ~ "Horizontal tunnel",
+    TRUE ~ type)) %>% 
   mutate(average = map2_dbl(.x = yield_lower, .y = yield_upper, 
                         ~ avg(.x, .y))) %>% 
   mutate(scaled_average = average / 1000) %>%
   mutate(plot_scaled_average = ifelse(scaled_average < 1, 1, scaled_average)) %>% 
   mutate(popup_info = paste0("<b>Estimated yield (Mt TNT): </b>", scaled_average, "<br/>",
+                             "<b>Deployment Method: </b>", map_type, "<br/>",
                              "<b>Purpose: </b>", map_purpose, "<br/>",
                              "<b>Country: </b>", country, "<br/>",
                              "<b>Region: </b>", region, "<br/>",
