@@ -60,13 +60,9 @@ explosions2 <- explosions %>%
                              "<b>Year: </b>", year, "<br/>"))
 
 # Create a palette for explosion sizes
-pal <- colorNumeric(palette = 'viridis', 
+pal <- colorNumeric(palette = 'inferno', 
                    domain = explosions2$plot_scaled_average,
                    na.color = NA)
-# To do:
-# Fix popups
-# Fix title
-# Fix scale so that values < 1 will still show up as 1
 
 leaflet() %>% 
   addTiles() %>% 
