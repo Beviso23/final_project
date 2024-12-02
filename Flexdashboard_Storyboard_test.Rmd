@@ -142,7 +142,7 @@ nukes_by_year <- ggplot(data=counts_by_year, aes (x = year, y = n, color = count
   theme_bw() +
   labs(y = "Number of Nuclear Explosion Events",x = "Year") +
   scale_x_continuous(breaks = seq(1945, 2000, 5), limits = c(1945, 1998)) +
-  scale_color_manual(breaks = c("China", "France", "India", "Pakistan", "UK", "USA", "USSR"), values = c("hotpink3", "blue", "green3", "orange", "steelblue", "black", "red3")) +
+  scale_color_manual(breaks = c("USA", "USSR", "UK", "China", "France", "India", "Pakistan"), values = c("black", "red", "steelblue", "hotpink3", "blue", "green3", "orange")) +
   theme(panel.background = element_blank(),,panel.grid.major = element_blank(),
          panel.grid.minor = element_blank(),plot.background = element_blank()) +
   theme(legend.position = "top", legend.title = element_blank()) +
