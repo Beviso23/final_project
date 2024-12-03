@@ -17,10 +17,11 @@ library(plotly)
 library(scales)
 library(forcats)
 library(ggplot2)
-library(ggpubr)
+
 library(ggridges)
 library(ggthemes)
 library(vistime)
+library(ggpubr)
 explosions <- read_csv("data/nuclear_explosions.csv")
 ```
 
