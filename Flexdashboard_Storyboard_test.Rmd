@@ -285,21 +285,22 @@ top_5_purposes_data <-  top_5_purposes_data %>%
                      "WR" = "Weapons development")
   )
 ```
-```{r}
-ggplot(top_5_purposes_data, aes(x = `number_instances`, y = `purpose`, fill = after_stat(x), alpha = number_instances)) +
-  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01, bandwidth = 90) +
-  scale_x_log10(labels = scales::label_number()) +
-  scale_y_discrete(expand = c(0, 0)) +
-  scale_fill_viridis_c(name = "Number of Instances", option = "C") +
-    coord_cartesian(clip = "off") +
-    labs(title = 'Instances of Nuclear Testing') +
-      theme_ridges(font_size = 13, grid = TRUE) +
-    scale_x_continuous(labels = label_number()) +
-    theme(axis.title.y = element_blank(),
-          panel.background = element_rect(fill = "lightgray", color = "black"),
-          plot.background = element_rect(fill = "white"),
-          panel.grid = element_line(colour = "gray80", size = 0.5))
+
+```{r,fig.width=10, fig.height=5}
+ggplot(top_5_purposes_data, aes(x = number_instances, y = purpose, fill = purpose, alpha = 0.5)) +
+  geom_density_ridges() +
+  scale_x_log10() +  # Apply log10 transformation to the x-axis
+  scale_fill_manual(values = c("yellow", "green", "purple", "orange", "red")) +  # Custom colors
+  scale_x_continuous(labels = label_number()) +
+  labs(title = 'Purpose of Nuclear Testing versus Number of Times', x = 'Number of Times', y = 'Purpose of Nuclear Testing') +
+  theme_ridges() +
+  theme(legend.position = "none",
+    axis.title.x = element_text(hjust = 0.5),
+    axis.title.y = element_text(hjust = 0.5, angle = 90))
 ```
+*** This geom_density plot illustrates the top five most common purposes for
+a nuclear explosion event with weapons development being the most common.
+
 
 
 ### Arielle's Graph
