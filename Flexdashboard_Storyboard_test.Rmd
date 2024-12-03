@@ -298,13 +298,6 @@ ggplot(top_5_purposes_data, aes(x = number_instances, y = purpose, fill = purpos
     axis.title.x = element_text(hjust = 0.5),
     axis.title.y = element_text(hjust = 0.5, angle = 90))
 ```
----
-title: "Flexdashboard with Plot and Text"
-output: flexdashboard::flex_dashboard
----
-
-Column {data-width=650}
------------------------------------------------------------------------
 
 
 
