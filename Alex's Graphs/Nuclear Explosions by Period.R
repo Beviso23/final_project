@@ -6,6 +6,7 @@ library(ggplot2)
 library(leaflet)
 library(ggthemes)
 library(ggpubr)
+library(sf)
 
 #load date
 
@@ -14,6 +15,12 @@ getwd()
 setwd('..')
 getwd()
 setwd('data')
+
+WorldData <- map_data('world') %>% filter(region != "Antarctica") %>% fortify
+
+ggplot(data = WorldData, aes(x = long, y = lat, group = group)) + 
+  geom_polygon(fill = "azure", colour = "grey")
+  
 
 major_events <- read.csv("Major Events.csv")
 explosions <- read.csv("nuclear_explosions.csv")
@@ -109,6 +116,15 @@ counts_by_year <- explosion_event %>%
 PAK_events <- counts_by_year %>%
   filter(country == "Pakistan")
 
+data_1945_1953 <- counts_by_year %>%
+  filter ( year <= 1953)
+
+graph_1945_1953 <- ggplot(data = data_1945_1953, aes(x = year, y = n, fill = country)) +
+  geom_col(position = 'dodge') +
+  scale_x_continuous(breaks = seq(1945, 1953, 1))
+
+ggsave("Preliminary Timeline Graph.jpg", graph_1945_1953)
+
 nukes_by_year <- ggplot(data=counts_by_year, aes (x = year, y = n, color = country)) +
   geom_line(linewidth = 1) +
   geom_point(data = PAK_events, color="orange") +
@@ -136,5 +152,6 @@ wars<- gg_vistime(timeline, col.event = "Position", col.group = "Name") +
 
 Explosions_Per_Country <- ggarrange(nukes_by_year, wars, nrow = 2, heights = c(3, 1.5), align = 'v')
 
+ggsave ("War_Timeline_Graph.jpg", wars)
 
 ggsave("111924_Explosions_Per_Country.jpg", Explosions_Per_Country, height = 6.5, width = 7.5, units = "in", dpi = 3000)
