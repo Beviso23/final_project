@@ -100,6 +100,47 @@ This map shows each nuclear explosion since 1945. The sizes of the circles are s
 ### Explosions Per Period
 
 ```{r}
+
+major_events <- read.csv("data/Major Events.csv")
+
+#Generate Separate Datasets by Periods
+
+explosion_event <- major_events %>%
+  full_join(explosions, by = "year")
+explosions_1945_1954 <- explosion_event %>%
+  filter(year <= 1954) %>%
+  filter(!is.na(region)) 
+
+region_1945_1954 <- explosions_1945_1954 %>%
+  group_by(region) %>%
+  summarize(count = n())%>%
+  right_join(explosions_1945_1954, by = 'region')
+
+explosions_1953_1959 <- explosion_event %>%
+  filter(year >= 1953 & year <= 1959) %>%
+  filter(!is.na(region))
+
+region_1953_1959 <- explosions_1953_1959 %>%
+  group_by(region) %>%
+  summarize(count = n()) %>%
+  right_join(explosions_1953_1959, by = 'region')
+explosions_1955_1975 <- explosion_event %>%
+  filter(year >= 1955 & year <= 1975) %>%
+  filter(!is.na(region))
+
+region_1955_1975 <- explosions_1955_1975 %>%
+  group_by(region) %>%
+  summarize(count = n())%>%
+  right_join(explosions_1955_1975, by = 'region') 
+explosions_1979_1989 <- explosion_event %>%
+  filter(year >= 1979 & year <= 1989) %>%
+  filter(!is.na(region))
+
+region_1979_1989 <- explosions_1979_1989 %>%
+  group_by(region) %>%
+  summarize(count = n())%>%
+  right_join(explosions_1979_1989, by = 'region')
+
 pal1<- leaflet::colorNumeric("viridis", domain = region_1945_1954$count)
 
 pal2<- leaflet::colorNumeric("viridis", domain = region_1953_1959$count)
@@ -159,45 +200,6 @@ The following map shows the number of nuclear tests across the globe during four
 ### Nuclear Explosions per Country
 
 ```{r, echo=FALSE, fig.width=6.5, fig.height=7.5}
-major_events <- read.csv("data/Major Events.csv")
-
-#Generate Separate Datasets by Periods
-
-explosion_event <- major_events %>%
-  full_join(explosions, by = "year")
-explosions_1945_1954 <- explosion_event %>%
-  filter(year <= 1954) %>%
-  filter(!is.na(region)) 
-
-region_1945_1954 <- explosions_1945_1954 %>%
-  group_by(region) %>%
-  summarize(count = n())%>%
-  right_join(explosions_1945_1954, by = 'region')
-
-explosions_1953_1959 <- explosion_event %>%
-  filter(year >= 1953 & year <= 1959) %>%
-  filter(!is.na(region))
-
-region_1953_1959 <- explosions_1953_1959 %>%
-  group_by(region) %>%
-  summarize(count = n()) %>%
-  right_join(explosions_1953_1959, by = 'region')
-explosions_1955_1975 <- explosion_event %>%
-  filter(year >= 1955 & year <= 1975) %>%
-  filter(!is.na(region))
-
-region_1955_1975 <- explosions_1955_1975 %>%
-  group_by(region) %>%
-  summarize(count = n())%>%
-  right_join(explosions_1955_1975, by = 'region') 
-explosions_1979_1989 <- explosion_event %>%
-  filter(year >= 1979 & year <= 1989) %>%
-  filter(!is.na(region))
-
-region_1979_1989 <- explosions_1979_1989 %>%
-  group_by(region) %>%
-  summarize(count = n())%>%
-  right_join(explosions_1979_1989, by = 'region')
 
 #plot looking at trend of each country from 1945 to 1998
 
