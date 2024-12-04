@@ -44,47 +44,4 @@ The file with the flexdashboard is called 'Flexdashboard_Storyboard_test.Rmd'. T
 | `name`                 | Character   | Name of the explosion or bomb                                              |
 | `type`                 | Character   | Method of deployment (e.g., air drop, underground, water surface, etc.)    |
 
----
-
-### Objectives
-
-1. **Standardize and Enhance Data**:
-   - Normalize country names (e.g., `"USA"` → `"United States"`).
-   - Recode deployment types and purposes with descriptive names.
-   - Assign unique identifiers to unnamed bombs (e.g., `"Unnamed Bomb 1"`).
-   - Map regions to descriptive names with country information.
-
-2. **Create Visualizations**:
-   - **Interactive Bar Plots**:
-     - Number of nuclear explosions by country per year.
-     - Deployment methods by country.
-   - **Static Analysis**:
-     - Top 10 largest yield bombs.
-     - Largest bomb per country with purpose, deployment type, and yield.
-     - Most common regions for nuclear bomb deployment.
-   - **Global Map**:
-     - Worldwide nuclear explosions with interactive details (yield, purpose, deployment type).
-
-3. **Explore Trends and Context**:
-   - Analyze the number of tests over time, relating to historical events.
-   - Categorize bombs by purpose (e.g., military, safety tests).
-   - Evaluate deployment patterns (e.g., atmospheric vs. underground).
-
----
-
-### Key Transformations
-
-1. **Country Normalization**:
-   - Converted shorthand country codes to full names (e.g., `"USA"` → `"United States"`).
-
-2. **Region Mapping**:
-   - Replaced region abbreviations with descriptive names, including the country (e.g., `"NTS"` → `"Nevada Test Site, USA"`).
-
-3. **Bomb Names**:
-   - Assigned sequential names to bombs with missing names (e.g., `"Unnamed Bomb 1"`).
-
-4. **Type Recoding**:
-   - Mapped deployment types to descriptive terms (e.g., `"ATMOSPH"` → `"Atmospheric"`).
-
-
 
