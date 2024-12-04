@@ -17,7 +17,6 @@ library(plotly)
 library(scales)
 library(forcats)
 library(ggplot2)
-
 library(ggridges)
 library(ggthemes)
 library(vistime)
@@ -635,13 +634,12 @@ wars <- ggarrange(nukes_by_year, wars, nrow = 2, heights = c(3, 1.5), align = 'v
 
 wars
 
-
 ```
 
 <div>
 The following plot shows conflicts
 <div>
-from 1945-1989 and the amount
+from 1945-1998 and the amount
 <div> 
 of nuclear bombs tested by the 
 <div>
