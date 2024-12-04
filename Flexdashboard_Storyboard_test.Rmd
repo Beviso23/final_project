@@ -97,6 +97,65 @@ leaflet() %>%
 This map shows each nuclear explosion since 1945. The sizes of the circles are scaled and colored based on the estimated yield in megatonnes of TNT. Each circle has a popup that shows info on the estimated yield, purpose of explosion, country, region, and year.
 
 
+### Explosions Per Period
+
+```{r}
+pal1<- leaflet::colorNumeric("viridis", domain = region_1945_1954$count)
+
+pal2<- leaflet::colorNumeric("viridis", domain = region_1953_1959$count)
+
+pal3<- leaflet::colorNumeric("viridis", domain = region_1955_1975$count)
+
+pal4<- leaflet::colorNumeric("viridis", domain = region_1979_1989$count)
+
+
+#graph with leaflet to generate layers by period
+leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers(data = region_1945_1954, ~longitude, ~latitude , radius = 3, color = ~pal1(count), fillOpacity = 0.7,group = "1945-1954")%>%
+  addLegend(data = region_1945_1954,
+            position = "bottomright",
+            pal = pal1, values = ~count,
+            title = "# of Events",
+            opacity = 1, group="1945-1954") %>%
+  addCircleMarkers(data = region_1953_1959, ~longitude, ~latitude , radius = 3, color = ~pal2(count), fillOpacity = 0.7,group = "1953-1959")%>%
+  addLegend(data = region_1953_1959,
+            position = "bottomright",
+            pal = pal2, values = ~count,
+            title = "# of Events",
+            opacity = 1, group="1953-1959") %>%
+  addCircleMarkers(data = region_1955_1975, ~longitude, ~latitude , radius = 3, color = ~pal3(count), fillOpacity = 0.7,group = "1955-1975")%>%
+  addLegend(data = region_1955_1975,
+            position = "bottomright",
+            pal = pal3, values = ~count,
+            title = "# of Events",
+            opacity = 1, group = "1955-1975") %>%
+  addCircleMarkers(data = region_1979_1989, ~longitude, ~latitude , radius = 3, color = ~pal4(count), fillOpacity = 0.7,group = "1979-1989")%>%
+  addLegend(data = region_1979_1989,
+            position = "bottomright",
+            pal = pal4, values = ~count,
+            title = "# of Events",
+            opacity = 1, group = "1979-1989") %>%
+  addLayersControl(overlayGroups = c("1945-1954", "1953-1959", "1955-1975", "1979-1989"), position = "topright", options = layersControlOptions(collapsed = F)) %>%
+  hideGroup(c("1953-1959", "1955-1975", "1979-1989"))
+
+
+
+```
+
+***
+The following map shows the number of nuclear tests across the globe during four periods:
+
+-The End of WWII through the end of the Korean War (1945-1954)
+
+-The Cuban Revolution (1953-1959)
+
+-The Vietnam War (1955-1975)
+
+-The Iran-Iraq War and Soviet-Afghan War (1979-1989)
+
+
+
 ### Nuclear Explosions per Country
 
 ```{r, echo=FALSE, fig.width=6.5, fig.height=7.5}
@@ -197,62 +256,6 @@ The Cold War and the many conflicts
 that occurred during that time.
 <div>
 
-### Explosions Per Period
-
-```{r}
-pal1<- leaflet::colorNumeric("viridis", domain = region_1945_1954$count)
-
-pal2<- leaflet::colorNumeric("viridis", domain = region_1953_1959$count)
-
-pal3<- leaflet::colorNumeric("viridis", domain = region_1955_1975$count)
-
-pal4<- leaflet::colorNumeric("viridis", domain = region_1979_1989$count)
-
-
-#graph with leaflet to generate layers by period
-leaflet() %>%
-  addTiles() %>%
-  addCircleMarkers(data = region_1945_1954, ~longitude, ~latitude , radius = 3, color = ~pal1(count), fillOpacity = 0.7,group = "1945-1954")%>%
-  addLegend(data = region_1945_1954,
-            position = "bottomright",
-            pal = pal1, values = ~count,
-            title = "# of Events",
-            opacity = 1, group="1945-1954") %>%
-  addCircleMarkers(data = region_1953_1959, ~longitude, ~latitude , radius = 3, color = ~pal2(count), fillOpacity = 0.7,group = "1953-1959")%>%
-  addLegend(data = region_1953_1959,
-            position = "bottomright",
-            pal = pal2, values = ~count,
-            title = "# of Events",
-            opacity = 1, group="1953-1959") %>%
-  addCircleMarkers(data = region_1955_1975, ~longitude, ~latitude , radius = 3, color = ~pal3(count), fillOpacity = 0.7,group = "1955-1975")%>%
-  addLegend(data = region_1955_1975,
-            position = "bottomright",
-            pal = pal3, values = ~count,
-            title = "# of Events",
-            opacity = 1, group = "1955-1975") %>%
-  addCircleMarkers(data = region_1979_1989, ~longitude, ~latitude , radius = 3, color = ~pal4(count), fillOpacity = 0.7,group = "1979-1989")%>%
-  addLegend(data = region_1979_1989,
-            position = "bottomright",
-            pal = pal4, values = ~count,
-            title = "# of Events",
-            opacity = 1, group = "1979-1989") %>%
-  addLayersControl(overlayGroups = c("1945-1954", "1953-1959", "1955-1975", "1979-1989"), position = "topright", options = layersControlOptions(collapsed = F)) %>%
-  hideGroup(c("1953-1959", "1955-1975", "1979-1989"))
-
-
-
-```
-
-***
-The following map shows the number of nuclear tests across the globe during four periods:
-
--The End of WWII through the end of the Korean War (1945-1954)
-
--The Cuban Revolution (1953-1959)
-
--The Vietnam War (1955-1975)
-
--The Iran-Iraq War and Soviet-Afghan War (1979-1989)
 
 
 ### Nuclear Explosions by Purpose
