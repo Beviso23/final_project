@@ -25,7 +25,7 @@ library(stringr)
 ```
 # Read in nuclear explosions data
 ```{r}
-explosions <- read_csv("nuclear_explosions.csv")
+explosions <- read.csv("./data/nuclear_explosions.csv")
 ```
 
 # Calculate total number of instances for each purpose

@@ -21,7 +21,7 @@ Interactive plot displaying the number of nuclear bombs by country per year
 
 ```{r}
 
-data <- read.csv ("data/nuclear_explosions.csv")
+data <- read.csv ("./data/nuclear_explosions.csv")
 
 mutated_country <- data %>%
   mutate(

@@ -22,8 +22,8 @@ ggplot(data = WorldData, aes(x = long, y = lat, group = group)) +
   geom_polygon(fill = "azure", colour = "grey")
   
 
-major_events <- read.csv("Major Events.csv")
-explosions <- read.csv("nuclear_explosions.csv")
+major_events <- read.csv("./data/Major Events.csv")
+explosions <- read.csv("./data/nuclear_explosions.csv")
 
 #Generate Separate Datasets by Periods
 
