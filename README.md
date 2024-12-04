@@ -10,7 +10,6 @@ output:
 ### Introduction
 
 This project leverages the **Nuclear Explosions Dataset** sourced from the [Stockholm International Peace Research Institute](https://www.sipri.org/) and tidied via the [rfordatascience](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-08-20) TidyTuesday repository. The analysis focuses on exploring nuclear explosions by country, deployment methods, regions, yield, and purpose over time using both static and interactive visualizations.
-The file with the flexdashboard is called 'Flexdashboard_Storyboard_test.Rmd'. The Flexdashboard consists of panels that summarize the data on nuclear explosions from 1945 to 1998 through quantitative, interactive, and geographical visualization.
 
 ---
 
@@ -44,4 +43,9 @@ The file with the flexdashboard is called 'Flexdashboard_Storyboard_test.Rmd'. T
 | `name`                 | Character   | Name of the explosion or bomb                                              |
 | `type`                 | Character   | Method of deployment (e.g., air drop, underground, water surface, etc.)    |
 
+---
+
+### Flexdashboard
+
+The file with the flexdashboard is called 'Flexdashboard_Storyboard_test.Rmd'. The Flexdashboard consists of panels that summarize the data on nuclear explosions from 1945 to 1998 through quantitative, interactive, and geographical visualization.
 
