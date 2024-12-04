@@ -25,7 +25,7 @@ This project leverages the **Nuclear Explosions Dataset** sourced from the [Stoc
 #### Data Dictionary
 
 | Variable Name          | Data Type   | Description                                                                 |
-|-------------------------|-------------|-----------------------------------------------------------------------------|
+|------------------------|-------------|-----------------------------------------------------------------------------|
 | `date_long`            | Date        | Date of the explosion (YYYY-MM-DD)                                         |
 | `year`                 | Numeric     | Year of the explosion                                                      |
 | `id_no`                | Numeric     | Unique identifier for the explosion                                        |
