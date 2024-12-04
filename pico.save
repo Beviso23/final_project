@@ -1,7 +1,0 @@
-nano <file-name>
-git config --global core.editor
-git config --global core.editor "nano"
-nano --version
-brew install nano
-
-
