@@ -111,8 +111,6 @@ leaflet() %>%
 ```
 
 ```{r SG}
-# Susan's graph
-```{r}
 library(ggplot2)
 library(tidyverse)
 library(conflicted)

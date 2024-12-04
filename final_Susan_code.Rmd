@@ -1,0 +1,85 @@
+---
+title: "code"
+author: "Susan Gogolski"
+date: "2024-12-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+Susan’s Code for project
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(conflicted)
+library(ggridges)
+library(plotly)
+library(dplyr)
+library(RColorBrewer) 
+library(forcats)
+library(scales)
+library(stringr)
+```
+# Read in nuclear explosions data
+```{r}
+explosions <- read_csv("nuclear_explosions.csv")
+```
+
+# Calculate total number of instances for each purpose
+```{r}
+purpose <- explosions %>%
+  group_by(purpose) %>%
+  summarise(number_instances = n(), .groups = "drop")
+```
+# Select the top 5 purposes bases on the number of instances
+```{r}
+top_5_purposes <- purpose %>%
+  arrange(desc(number_instances)) %>%
+  slice_head(n = 5)
+```
+# Join with the original dataset to get corresponding `country` and `yield_upper`
+# Here, we use `left_join` to keep all columns from the original `purpose` data
+
+```{r}
+# Join the top 5 purposes with the explosions data
+top_5_purposes_data <- explosions %>%
+  dplyr::filter(purpose %in% top_5_purposes$purpose) %>%
+  # Join with the `top_5_purposes` to get `number_instances` from the purpose dataset
+  left_join(top_5_purposes, by = "purpose") %>%
+  select(purpose, number_instances, country, yield_upper, year)
+```
+```{r}
+# Replace abbreviations with full words
+top_5_purposes_data <-  top_5_purposes_data %>%
+  mutate(
+    purpose = recode(purpose,
+                     "FMS" = "Soviet test",
+                     "PNE" = "Peaceful nuclear explosion",
+                     "SE" = "Accidental safety testing",
+                     "WE" = "Target nuclear detonation",
+                     "WR" = "Weapons development")
+  )
+```
+
+```{r, fig.width=10, fig.height=5}
+ggplot(top_5_purposes_data, aes(x = number_instances, y = purpose, fill = purpose, alpha = 0.5)) +
+  geom_density_ridges() +
+  scale_x_log10() +  # Apply log10 transformation to the x-axis
+  scale_fill_manual(values = c("yellow", "green", "purple", "orange", "red")) +  # Custom colors
+  scale_x_continuous(labels = label_number()) +
+  labs(title = 'Purpose of Nuclear Testing versus Number of Times', x = 'Number of Times', y = 'Purpose of Nuclear Testing') +
+  theme_ridges() +
+  theme(legend.position = "none",
+    axis.title.x = element_text(hjust = 0.5),
+    axis.title.y = element_text(hjust = 0.5, angle = 90))
+```
+
+```
+
+
+
+
+
