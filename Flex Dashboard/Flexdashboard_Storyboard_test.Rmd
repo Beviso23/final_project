@@ -21,14 +21,14 @@ library(ggridges)
 library(ggthemes)
 library(vistime)
 library(ggpubr)
-explosions <- read_csv("data/nuclear_explosions.csv")
+explosions <- read_csv("./../data/nuclear_explosions.csv")
 ```
 
 ### Interactive plot displaying the number of nuclear bombs by country per year
 
 ```{r}
 
-data <- read.csv ("data/nuclear_explosions.csv")
+data <- read.csv ("./../data/nuclear_explosions.csv")
 
 mutated_country <- data %>%
   mutate(
@@ -494,7 +494,7 @@ This map shows each nuclear explosion since 1945. The sizes of the circles are s
 
 ```{r}
 
-major_events <- read.csv("data/Major Events.csv")
+major_events <- read.csv("./../data/Major Events.csv")
 
 #Generate Separate Datasets by Periods
 
