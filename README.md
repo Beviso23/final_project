@@ -9,7 +9,7 @@ This project leverages the **Nuclear Explosions Dataset** sourced from the [Stoc
 ### Data Information
 
 #### Data Source
-- **Primary Dataset**: Nuclear Explosions Dataset (via TidyTuesday)
+- **Primary Dataset**: [Nuclear Explosions Dataset](https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-08-20) (via TidyTuesday)
 - **Supporting References**:
   - [Wikipedia - Nuclear Weapon Testing](https://en.wikipedia.org/wiki/Nuclear_weapon_testing)
   - [Stockholm International Peace Research Institute (SIPRI)](https://www.sipri.org/)
@@ -37,6 +37,9 @@ This project leverages the **Nuclear Explosions Dataset** sourced from the [Stoc
 | `type`                 | Character   | Method of deployment (e.g., air drop, underground, water surface, etc.)    |
 
 ---
+### Flexdashboard
+  The file to knit to create the flexdashboard is called 'Flexdashboard_Storyboard_test.Rmd', found within the [Flexdashboard](https://github.com/Beviso23/final_project/tree/master/Flex%20Dashboard) folder.
+  The Flexdashboard consists of panels that summarize the data on nuclear explosions from 1945 to 1998 through quantitative, interactive, and geographical visualization.
 
 ### Folders
 
@@ -74,6 +77,4 @@ This project leverages the **Nuclear Explosions Dataset** sourced from the [Stoc
 ##### .gitignore
   Ignores updates to dashboard to prevent merging issues when pushing/pulling
 
-### Flexdashboard
-  The file with the flexdashboard is called 'Flexdashboard_Storyboard_test.Rmd'. The Flexdashboard consists of   panels that summarize the data on nuclear explosions from 1945 to 1998 through quantitative, interactive, and   geographical visualization.
 
